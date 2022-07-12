@@ -2,6 +2,7 @@ import sys
 import os 
 import hashlib      # Generating hashes 
 import pefile
+from sys import platform
 
 # https://github.com/erocarrera/pefile/blob/0d5ce5e0193c878cd57636b438b3746ffc3ae7e3/pefile.py#L1324
 def getEntropy(data):
@@ -63,7 +64,10 @@ if __name__ == "__main__":
         else:
             print("Imports \t:")
             printImports(pe)
-        strings = "\\\\live.sysinternals.com@SSL\\DavWWWRoot\\strings.exe -accepteula -n 7 " + sys.argv[1]
+            if platform == "win32":
+                strings = "\\\\live.sysinternals.com@SSL\\DavWWWRoot\\strings.exe -accepteula -n 7 " + sys.argv[1]
+            else:
+                strings = "strings -n 7 " + sys.argv[1]
         os.system(strings)
     except:
-        print("python3 pe-properties.py <path to executable>")
+        print("python3 measure.py <path to executable>")
